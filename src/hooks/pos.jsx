@@ -39,6 +39,8 @@ const pos = () => {
       .filter((item) => item?.category === category)[0]
       ?.itemsData?.filter((items) => items?.food_id === food_id);
 
+      console.log("fuilterdata",filterData);
+
     dispatch(addCart({ category, items: filterData }));
   };
 

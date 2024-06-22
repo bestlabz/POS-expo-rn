@@ -11,6 +11,7 @@ import {
   ScrollView,
   SafeAreaView,
   Button,
+  Pressable,
 } from "react-native";
 import { menuItems } from "../constants";
 // import SelectedFoodItem from './SelectedFoodItem';
@@ -21,7 +22,7 @@ import ModalPage from "../components/properties/ModalPage";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
-const pos = () => {
+const Pos = () => {
   const navigation = useNavigation();
 
   const {
@@ -130,7 +131,7 @@ const pos = () => {
               </View>
             </ScrollView>
           </View>
-
+{/* 
           <ScrollView
             contentContainerStyle={{
               paddingBottom: 100,
@@ -166,13 +167,69 @@ const pos = () => {
                 </>
               ))}
             </View>
-          </ScrollView>
+          </ScrollView> */}
+          {/* <View style={{flex:1}}> */}
+          <FlatList  
+        //   contentContainerStyle={{
+        //     //   paddingBottom: 100,
+        //     //   flexWrap:"wrap"
+        //     flexDirection: 'row',
+        //     width: '100%',
+        //     flexWrap: 'wrap',
+        //     alignItems: 'center',
+        //     justifyContent: 'center',
+        //     }}
+            // style={{ padding: 10,
+            //     flexDirection: 'column',}}
+            showsVerticalScrollIndicator={false} 
+            data={filterDatas} 
+            key="*" 
+            numColumns={3}
+            // horizontal={true}
+            keyExtractor={(item,index)=>{return "*"+index.toString()}} renderItem={({item,index})=>{
+                
+            return(
+                <View style={{flex:1}}>
+                <FlatList 
+                
+            data={item?.itemsData} key={"@"} keyExtractor={(item,index)=>{return "@"+index.toString()}} renderItem={(items,index)=>{
+                   
+                    return(
+                    <Pressable
+                onPress={() =>
+                  toggleModal({
+                    category: item.category,
+                    food_id: items.item.food_id,
+                  })
+                }
+                key={index}
+                className="relative m-[5px] border-[1px] w-[194px] h-[300px] overflow-hidden border-secondary_text rounded-md "
+              >
+                <Image
+                  className="w-full h-full object-contain"
+                  source={{ uri: items?.item?.image }}
+                />
+                <Text className="absolute bottom-14 right-2 text-[24px] text-white font-semibold ">
+                  {items?.item?.name}
+                </Text>
+                <Text className="absolute bottom-4 right-2 text-[28px] text-white font-bold">
+                  ${items?.item?.price}
+                </Text>
+              </Pressable>
+              )
+                }} />
+                {/* <View style={{backgroundColor:'blue',flexGrow:1}}></View> */}
+                </View>
+                
+            )
+          }} />
+          {/* </View> */}
         </View>
       </View>
 
       <View className="w-[30%] h-[97.5%] shadow-lg shadow-secondary_text my-auto bg-white border-[1px] border-secondary_text rounded-md">
         <View className="w-full h-[59%] py-3">
-          <ScrollView>
+          {/* <ScrollView>
             {cartItem && cartItem.map((item) => (
               <>
                 {item?.itemsData?.map((items, index) => (
@@ -189,7 +246,29 @@ const pos = () => {
                 ))}
               </>
             ))}
-          </ScrollView>
+          </ScrollView> */}
+          <FlatList data={cartItem}  key="%" keyExtractor={(item,index)=>{return "%" + index.toString()}} renderItem={(items,index)=>{
+            
+
+            return(
+                <FlatList data={items?.item?.itemsData} key="_" keyExtractor={(item,index)=>{return "_"+index.toString()}} renderItem={({item,index})=>{
+                    
+                    return(
+                        <Pressable
+                        onPress={() =>{ openModal({food_id: item?.food_id, category: items?.item?.category});console.log("asdasfadsfsdf ",item?.food_id,items?.item?.category);}}
+                          key={index}
+                          className="flex-row w-[95%] mx-auto mb-3 items-center justify-between px-4 py-2 border-b-[1px] border-secondary_text rounded-lg"
+                        >
+                          <Text className="text-[18px]">{item?.name}</Text>
+                          <Text className="text-[18px] font-bold">
+                            ${item?.price}
+                          </Text>
+                        </Pressable>
+                    )
+                }} />
+              
+            )
+          }}/>
         </View>
         <View className="w-full h-[40%] px-3">
           <View className="w-full flex-row items-center justify-between border-b-[1px] border-secondary_text py-2">
@@ -240,4 +319,4 @@ const pos = () => {
   );
 };
 
-export default pos;
+export default Pos;
